@@ -10,7 +10,7 @@ import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatInputModule } from "@angular/material/input";
 import { MatChipsModule } from "@angular/material/chips";
 import { MatDialogModule, MatDialog } from "@angular/material/dialog";
-import { MatFabModule } from "@angular/material/fab";
+// MatFab is part of MatButtonModule
 import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
 import { MatSnackBar, MatSnackBarModule } from "@angular/material/snack-bar";
 import { MatMenuModule } from "@angular/material/menu";
@@ -34,7 +34,7 @@ import { ShareDialogComponent } from "../share-dialog/share-dialog.component";
     MatInputModule,
     MatChipsModule,
     MatDialogModule,
-    MatFabModule,
+
     MatProgressSpinnerModule,
     MatSnackBarModule,
     MatMenuModule,
