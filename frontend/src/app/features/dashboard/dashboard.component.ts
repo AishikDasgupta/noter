@@ -1,4 +1,10 @@
-import { Component, OnInit } from "@angular/core";
+import {
+  Component,
+  OnInit,
+  ViewChild,
+  ElementRef,
+  AfterViewInit,
+} from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { MatCardModule } from "@angular/material/card";
 import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
@@ -74,7 +80,10 @@ Chart.register(...registerables);
     </div>
   `,
 })
-export class DashboardComponent implements OnInit {
+export class DashboardComponent implements OnInit, AfterViewInit {
+  @ViewChild("tagsChart") tagsChart!: ElementRef<HTMLCanvasElement>;
+  @ViewChild("dailyChart") dailyChart!: ElementRef<HTMLCanvasElement>;
+
   isLoading = true;
   activeUsers: ActiveUser[] = [];
   tagUsage: TagUsage[] = [];
@@ -84,6 +93,10 @@ export class DashboardComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadAnalyticsData();
+  }
+
+  ngAfterViewInit(): void {
+    // Charts will be created after data is loaded
   }
 
   loadAnalyticsData(): void {
@@ -115,10 +128,9 @@ export class DashboardComponent implements OnInit {
   }
 
   createTagsChart(): void {
-    const canvas = document.querySelector("#tagsChart") as HTMLCanvasElement;
-    if (!canvas || this.tagUsage.length === 0) return;
+    if (!this.tagsChart?.nativeElement || this.tagUsage.length === 0) return;
 
-    const ctx = canvas.getContext("2d");
+    const ctx = this.tagsChart.nativeElement.getContext("2d");
     if (!ctx) return;
 
     new Chart(ctx, {
@@ -152,10 +164,9 @@ export class DashboardComponent implements OnInit {
   }
 
   createDailyChart(): void {
-    const canvas = document.querySelector("#dailyChart") as HTMLCanvasElement;
-    if (!canvas || this.dailyNotes.length === 0) return;
+    if (!this.dailyChart?.nativeElement || this.dailyNotes.length === 0) return;
 
-    const ctx = canvas.getContext("2d");
+    const ctx = this.dailyChart.nativeElement.getContext("2d");
     if (!ctx) return;
 
     new Chart(ctx, {
