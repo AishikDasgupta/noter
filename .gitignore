@@ -21,6 +21,10 @@ build/            # Another common build output directory
 tmp/              # Temporary files, if applicable
 logs/             # If you have a logs directory, you might want to ignore it
 *.lock            # Lock files, if you use npm or yarn
+node_modules/      # Node.js dependencies, if you have any at the root
+package-lock.json  # npm lock file
+yarn.lock          # Yarn lock file
+pnpm-lock.yaml     # pnpm lock file
 
 
 # ----------------------------------------

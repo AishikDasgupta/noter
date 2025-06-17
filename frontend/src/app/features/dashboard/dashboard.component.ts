@@ -15,6 +15,7 @@ import {
   TagUsage,
   DailyNoteCount,
 } from "../../shared/models/analytics.model";
+import { firstValueFrom } from 'rxjs';
 
 Chart.register(...registerables);
 
@@ -101,9 +102,9 @@ export class DashboardComponent implements OnInit, AfterViewInit {
 
   loadAnalyticsData(): void {
     Promise.all([
-      this.analyticsService.getMostActiveUsers().toPromise(),
-      this.analyticsService.getMostUsedTags().toPromise(),
-      this.analyticsService.getNotesCreatedDaily().toPromise(),
+      firstValueFrom(this.analyticsService.getMostActiveUsers()),
+      firstValueFrom(this.analyticsService.getMostUsedTags()),
+      firstValueFrom(this.analyticsService.getNotesCreatedDaily())
     ])
       .then(([activeUsers, tagUsage, dailyNotes]) => {
         this.activeUsers = activeUsers || [];

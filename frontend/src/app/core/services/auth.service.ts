@@ -8,6 +8,7 @@ import {
   LoginResponse,
   RegisterRequest,
 } from "../../shared/models/user.model";
+import { ActivatedRouteSnapshot } from "@angular/router";
 
 @Injectable({
   providedIn: "root",
@@ -68,5 +69,18 @@ export class AuthService {
 
   getCurrentUser(): User | null {
     return this.currentUserSubject.value;
+  }
+}
+
+@Injectable({
+  providedIn: 'root'
+})
+export class RoleGuard {
+  constructor(private authService: AuthService) {}
+
+  canActivate(route: ActivatedRouteSnapshot): boolean {
+    const requiredRole = route.data['role'];
+    const user = this.authService.getCurrentUser();
+    return user?.role === requiredRole;
   }
 }
