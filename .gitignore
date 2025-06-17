@@ -1,0 +1,45 @@
+# ----------------------------------------
+# General Monorepo Ignores
+# ----------------------------------------
+.DS_Store
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.idea/             # For WebStorm/IntelliJ
+.vscode/           # For VS Code config
+*.swp
+*.bak
+coverage/          # Common test coverage directory
+.env              # Environment variable files, if you have any at the root
+*.env.local       # Local environment variable files, if you have any at the root
+*.env.development # Development environment variable files, if you have any at the root
+*.env.production  # Production environment variable files, if you have any at the root
+*.env.test        # Test environment variable files, if you have any at the root
+dist/             # Common build output directory
+build/            # Another common build output directory
+tmp/              # Temporary files, if applicable
+logs/             # If you have a logs directory, you might want to ignore it
+*.lock            # Lock files, if you use npm or yarn
+
+
+# ----------------------------------------
+# Backend Specific Ignores (inside backend/)
+# ----------------------------------------
+backend/node_modules/
+backend/.env       # Crucial: your backend secret keys
+backend/dist/      # Common for compiled JS (if you use TypeScript)
+backend/build/     # Another common build output directory
+backend/logs/     # If you have a logs directory, you might want to ignore it
+backend/tmp/       # Temporary files, if applicable
+backend/coverage/  # If you run tests and generate coverage reports
+
+
+# ----------------------------------------
+# Frontend Specific Ignores (inside frontend/)
+# ----------------------------------------
+frontend/node_modules/
+frontend/.env      # Frontend also might have env variables, though often public ones
+frontend/build/    # Create React App, Next.js, Vue CLI build output
+frontend/dist/     # Another common frontend build output
+backend/.env
