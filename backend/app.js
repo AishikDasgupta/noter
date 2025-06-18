@@ -16,7 +16,7 @@ const app = express();
 // Enable CORS for specified origins (replace with your actual frontend URLs)
 app.use(cors({
  origin: [
-    'https://noter-frontend.netlify.app/',
+    'https://noter-frontend.netlify.app',
     'http://localhost:3000'
   ],
   credentials: true
