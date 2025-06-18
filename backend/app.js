@@ -17,7 +17,7 @@ const app = express();
 app.use(cors({
   origin: [
     'https://noter-six.vercel.app/', // <-- Replace with your actual Vercel frontend URL
-    'http://localhost:4200' // (optional) for local dev
+    'http://localhost:3000' // (optional) for local dev
   ],
   credentials: true
 }));
