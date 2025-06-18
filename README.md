@@ -143,7 +143,7 @@ curl -X POST http://localhost:5000/api/auth/create-admin \
   -d '{
     "username": "admin",
     "email": "admin@example.com",
-    "password": "admin123"
+    "password": "yourpasswod" (couldn't think of a better password, shall add reset/forget password in future)
   }'
 ```
 
