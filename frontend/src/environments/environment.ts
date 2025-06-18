@@ -2,5 +2,5 @@
 // The apiUrl is used throughout the app to make HTTP requests to the backend.
 export const environment = {
   production: false,
-  apiUrl: 'https://noter-backend-6xob.onrender.com/api'
+  apiUrl: 'http://localhost:5000/api'
 };
