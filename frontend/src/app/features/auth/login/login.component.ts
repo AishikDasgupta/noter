@@ -28,7 +28,7 @@ import { AuthService } from "../../../core/services/auth.service";
     MatProgressSpinnerModule,
   ],
   template: `
-    <div class="flex justify-center items-center min-h-screen">
+    <div class="flex flex-col items-center justify-center min-h-screen px-2 sm:px-0">
       <mat-card class="w-full max-w-md">
         <mat-card-header class="text-center mb-6">
           <mat-card-title class="text-2xl font-bold">Login</mat-card-title>

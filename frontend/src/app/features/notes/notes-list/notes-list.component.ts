@@ -41,12 +41,12 @@ import { AuthService } from "../../../core/services/auth.service";
     MatMenuModule,
   ],
   template: `
-    <div class="mb-8">
+    <div class="mb-8 px-2 sm:px-4">
       <h1 class="text-3xl font-bold text-gray-800 mb-6">My Notes</h1>
 
       <!-- Search and Filter -->
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-        <mat-form-field>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
+        <mat-form-field class="w-full">
           <mat-label>Search notes...</mat-label>
           <input
             matInput
@@ -56,7 +56,7 @@ import { AuthService } from "../../../core/services/auth.service";
           <mat-icon matSuffix>search</mat-icon>
         </mat-form-field>
 
-        <mat-form-field>
+        <mat-form-field class="w-full">
           <mat-label>Filter by tags</mat-label>
           <input
             matInput
@@ -76,7 +76,7 @@ import { AuthService } from "../../../core/services/auth.service";
     <!-- Notes Grid -->
     <div
       *ngIf="!isLoading"
-      class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8"
+      class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-8 px-2 sm:px-4"
     >
       <mat-card
         *ngFor="let note of notes"

@@ -24,7 +24,7 @@ Chart.register(...registerables);
   standalone: true,
   imports: [CommonModule, MatCardModule, MatProgressSpinnerModule],
   template: `
-    <div class="mb-8">
+    <div class="mb-8 px-2 sm:px-4">
       <h1 class="text-3xl font-bold text-gray-800 mb-6">Analytics Dashboard</h1>
     </div>
 
@@ -32,7 +32,7 @@ Chart.register(...registerables);
       <mat-spinner></mat-spinner>
     </div>
 
-    <div *ngIf="!isLoading" class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+    <div *ngIf="!isLoading" class="grid grid-cols-1 sm:grid-cols-2 gap-6 px-2 sm:px-4">
       <!-- Most Active Users -->
       <mat-card class="card-shadow">
         <mat-card-header>

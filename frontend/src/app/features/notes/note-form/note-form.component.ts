@@ -38,7 +38,7 @@ import { Note } from "../../../shared/models/note.model";
     MatSnackBarModule,
   ],
   template: `
-    <div class="max-w-4xl mx-auto">
+    <div class="max-w-4xl mx-auto px-2 sm:px-4">
       <mat-card>
         <mat-card-header>
           <mat-card-title class="text-2xl font-bold">
@@ -61,7 +61,7 @@ import { Note } from "../../../shared/models/note.model";
             (ngSubmit)="onSubmit()"
             class="space-y-6"
           >
-            <mat-form-field class="form-field">
+            <mat-form-field class="form-field w-full">
               <mat-label>Title</mat-label>
               <input matInput formControlName="title" required />
               <mat-error *ngIf="noteForm.get('title')?.hasError('required')">
@@ -69,7 +69,7 @@ import { Note } from "../../../shared/models/note.model";
               </mat-error>
             </mat-form-field>
 
-            <mat-form-field class="form-field">
+            <mat-form-field class="form-field w-full">
               <mat-label>Content</mat-label>
               <textarea
                 matInput
@@ -85,7 +85,7 @@ import { Note } from "../../../shared/models/note.model";
             </mat-form-field>
 
             <div>
-              <mat-form-field class="form-field">
+              <mat-form-field class="form-field w-full">
                 <mat-label>Tags</mat-label>
                 <mat-chip-grid #chipGrid aria-label="Enter tags">
                   <mat-chip-row
@@ -111,13 +111,13 @@ import { Note } from "../../../shared/models/note.model";
               </mat-form-field>
             </div>
 
-            <div class="flex items-center">
+            <div class="flex flex-col sm:flex-row items-start sm:items-center">
               <mat-checkbox formControlName="isArchived">
                 Archive this note
               </mat-checkbox>
             </div>
 
-            <div class="flex space-x-4">
+            <div class="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-4">
               <button
                 mat-raised-button
                 color="primary"

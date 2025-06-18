@@ -19,7 +19,7 @@ import { Observable } from "rxjs";
     MatIconModule,
   ],
   template: `
-    <div class="max-w-2xl mx-auto">
+    <div class="max-w-2xl mx-auto px-2 sm:px-4">
       <h1 class="text-3xl font-bold text-gray-800 mb-6">User Profile</h1>
 
       <mat-card class="card-shadow" *ngIf="currentUser$ | async as user">
