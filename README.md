@@ -156,7 +156,7 @@ Or use Postman/Insomnia with:
 {
   "username": "adminuser",
   "email": "admin@example.com",
-  "password": "admin123"
+  "password": "yourpassword"
 }
 ```
 
