@@ -1,3 +1,7 @@
+// This component displays a paginated, searchable list of notes.
+// It uses the NotesService to fetch notes and supports filtering by tags.
+// Responsive design is achieved using Tailwind CSS grid and padding classes.
+// Colorful tags are rendered using custom getTagColor method.
 import { Component, OnInit } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { RouterModule } from "@angular/router";

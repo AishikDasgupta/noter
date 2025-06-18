@@ -1,3 +1,7 @@
+// app.js - Main Express application setup
+// This file initializes the Express app, configures middleware, and registers API routes.
+// It is imported by server.js, which starts the server.
+
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
@@ -5,15 +9,20 @@ import authRoutes from './routes/auth.js';
 import notesRoutes from './routes/notes.routes.js';
 import analyticsRoutes from './routes/analytics.routes.js';
 
-dotenv.config();
+dotenv.config(); // Load environment variables from .env file
 
 const app = express();
+
+// Enable CORS for all origins (for development/demo; restrict in production)
 app.use(cors());
+// Parse incoming JSON requests
 app.use(express.json());
 
-// TODO: Import routes here
+// Register authentication routes (login, register, etc.)
 app.use('/api/auth', authRoutes);
+// Register notes CRUD and sharing routes
 app.use('/api/notes', notesRoutes);
+// Register admin analytics routes (protected, admin-only)
 app.use('/api/admin/analytics', analyticsRoutes);
 
 export default app;

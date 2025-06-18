@@ -1,3 +1,7 @@
+// notes.routes.js - Routes for notes CRUD, sharing, search, and filtering
+// This file defines all endpoints related to notes, including creation, reading (with pagination/search/tags), updating, deleting, and sharing/unsharing notes.
+// All routes are protected by the auth middleware.
+
 import express from 'express';
 import Note from '../models/notes.model.js';
 import User from '../models/User.js';
@@ -5,7 +9,10 @@ import auth from '../middlewares/auth.middleware.js';
 
 const router = express.Router();
 
-// CREATE a note
+// ---------------------- CREATE a note ----------------------
+// POST /api/notes
+// Requires: title, content, tags (optional)
+// Owner is set to the authenticated user
 router.post('/', auth, async (req, res) => {
   try {
     const { title, content, tags } = req.body;
@@ -22,7 +29,10 @@ router.post('/', auth, async (req, res) => {
   }
 });
 
-// READ all notes for the user (owned or shared)
+// ---------------------- READ all notes for the user (owned or shared) ----------------------
+// GET /api/notes
+// Supports pagination (page, limit), search (search), and tag filtering (tags)
+// Returns notes where user is owner or sharedWith
 router.get('/', auth, async (req, res) => {
   try {
     const user = await User.findOne({ email: req.user.email });
@@ -32,11 +42,11 @@ router.get('/', auth, async (req, res) => {
     const limit = parseInt(req.query.limit) || 10;
     const skip = (page - 1) * limit;
 
-    // Search
+    // Search (case-insensitive on title, content, tags)
     const search = req.query.search || '';
     const searchRegex = new RegExp(search, 'i');
 
-    // Tags filter
+    // Tags filter (comma-separated, matches any)
     let tagsFilter = {};
     if (req.query.tags) {
       const tagsArray = req.query.tags.split(',').map(tag => tag.trim()).filter(Boolean);
@@ -45,7 +55,7 @@ router.get('/', auth, async (req, res) => {
       }
     }
 
-    // Build query
+    // Build query: user is owner or sharedWith, plus search/tags
     const baseQuery = {
       $and: [
         {
@@ -71,24 +81,26 @@ router.get('/', auth, async (req, res) => {
       .sort({ updatedAt: -1 })
       .skip(skip)
       .limit(limit)
-      .populate('owner', 'username email') // Add username to owner
-      .populate('sharedWith.user', 'username email') // Add username to sharedWith.user
-      .populate('sharedWith.sharedBy', 'username email'); // Add username to sharedBy
+      .populate('owner', 'username email') // Populate owner info
+      .populate('sharedWith.user', 'username email') // Populate sharedWith user info
+      .populate('sharedWith.sharedBy', 'username email'); // Populate who shared
 
     const total = await Note.countDocuments(baseQuery);
 
     res.json({
       notes,
+      total,
       page,
       totalPages: Math.ceil(total / limit),
-      total
     });
   } catch (err) {
     res.status(500).json({ message: 'Server error' });
   }
 });
 
-// READ a single note
+// ---------------------- READ a single note ----------------------
+// GET /api/notes/:id
+// Returns the note with the given ID if the user is owner or has access
 router.get('/:id', auth, async (req, res) => {
   try {
     const note = await Note.findById(req.params.id);
@@ -105,7 +117,10 @@ router.get('/:id', auth, async (req, res) => {
   }
 });
 
-// UPDATE a note
+// ---------------------- UPDATE a note ----------------------
+// PUT /api/notes/:id
+// Requires: title, content, tags, isArchived (optional)
+// Only owner or users with write permission can update
 router.put('/:id', auth, async (req, res) => {
   try {
     const note = await Note.findById(req.params.id);
@@ -131,7 +146,9 @@ router.put('/:id', auth, async (req, res) => {
   }
 });
 
-// DELETE a note
+// ---------------------- DELETE a note ----------------------
+// DELETE /api/notes/:id
+// Only the owner can delete a note
 router.delete('/:id', auth, async (req, res) => {
   try {
     const note = await Note.findById(req.params.id);
@@ -147,7 +164,10 @@ router.delete('/:id', auth, async (req, res) => {
   }
 });
 
-// SHARE a note using username
+// ---------------------- SHARE a note using username ----------------------
+// POST /api/notes/:id/share
+// Requires: username, permission (read-only or read-write)
+// Only the owner can share a note
 router.post('/:id/share', auth, async (req, res) => {
   try {
     const note = await Note.findById(req.params.id);
@@ -195,7 +215,10 @@ router.post('/:id/share', auth, async (req, res) => {
   }
 });
 
-// REMOVE shared user using username
+// ---------------------- REMOVE shared user using username ----------------------
+// POST /api/notes/:id/unshare
+// Requires: username
+// Only the owner can unshare a note
 router.post('/:id/unshare', auth, async (req, res) => {
   try {
     const note = await Note.findById(req.params.id);
@@ -223,7 +246,9 @@ router.post('/:id/unshare', auth, async (req, res) => {
   }
 });
 
-// GET shared users list
+// ---------------------- GET shared users list ----------------------
+// GET /api/notes/:id/shared
+// Returns the list of users with whom the note is shared
 router.get('/:id/shared', auth, async (req, res) => {
   try {
     const note = await Note.findById(req.params.id).populate('sharedWith.user', 'email');
