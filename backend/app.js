@@ -13,8 +13,14 @@ dotenv.config(); // Load environment variables from .env file
 
 const app = express();
 
-// Enable CORS for all origins (for development/demo; restrict in production)
-app.use(cors());
+// Enable CORS for specified origins (replace with your actual frontend URLs)
+app.use(cors({
+  origin: [
+    'https://noter-six.vercel.app/', // <-- Replace with your actual Vercel frontend URL
+    'http://localhost:4200' // (optional) for local dev
+  ],
+  credentials: true
+}));
 // Parse incoming JSON requests
 app.use(express.json());
 
