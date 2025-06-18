@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  apiUrl: "http://localhost:5000/api",
+  apiUrl: "https://noter-backend-6xob.onrender.com",
 };
