@@ -1,5 +1,5 @@
 const adminOnly = (req, res, next) => {
-  if (!req.user.roles || !req.user.roles.includes('admin')) {
+  if (!req.user.role || req.user.role !== 'admin') {
     return res.status(403).json({ message: 'Admin only' });
   }
   next();

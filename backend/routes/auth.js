@@ -8,7 +8,7 @@ const router = express.Router();
 // Register
 router.post('/register', async (req, res) => {
   try {
-    const { email, password, roles } = req.body;
+    const { email, password, role } = req.body;
     // Check if user exists
     const existingUser = await User.findOne({ email });
     if (existingUser) return res.status(400).json({ message: 'This email already exists' });
@@ -19,8 +19,8 @@ router.post('/register', async (req, res) => {
     // Create user
     const user = new User({ 
       email, 
-      password: hashedPassword, 
-      roles: Array.isArray(roles) ? roles : roles ? [roles] : undefined 
+      password: hashedPassword,
+      role: role || 'user' // Default to 'user' if no role provided
     });
     await user.save();
 
@@ -30,6 +30,31 @@ router.post('/register', async (req, res) => {
   }
 });
 
+// DEVELOPMENT ONLY: Register admin user
+// WARNING: Remove or secure this endpoint before production!
+router.post('/register-admin', async (req, res) => {
+  try {
+    const { email, password } = req.body;
+    // Check if user exists
+    const existingUser = await User.findOne({ email });
+    if (existingUser) return res.status(400).json({ message: 'This email already exists' });
+
+    // Hash password
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    // Create admin user
+    const user = new User({ 
+      email, 
+      password: hashedPassword,
+      role: 'admin'
+    });
+    await user.save();
+
+    res.status(201).json({ message: 'Admin user registered successfully' });
+  } catch (err) {
+    res.status(500).json({ message: 'Server error' });
+  }
+});
 
 // Login
 router.post('/login', async (req, res) => {
@@ -45,12 +70,19 @@ router.post('/login', async (req, res) => {
 
     // Create JWT
     const token = jwt.sign(
-      { userId: user._id,email: user.email, roles: user.roles },
+      { userId: user._id, email: user.email, role: user.role },
       process.env.JWT_SECRET,
       { expiresIn: '1d' }
     );
 
-    res.json({ token, user: { email: user.email, roles: user.roles } });
+    res.json({ 
+      token, 
+      user: { 
+        _id: user._id,
+        email: user.email, 
+        role: user.role 
+      } 
+    });
   } catch (err) {
     res.status(500).json({ message: 'Server error' });
   }

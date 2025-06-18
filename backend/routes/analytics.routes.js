@@ -6,8 +6,10 @@ import adminOnly from '../middlewares/admin.middleware.js';
 
 const router = express.Router();
 
+// Renamed endpoints to match frontend service calls
+
 // 1. Most active users (top 5 by note count)
-router.get('/active-users', auth, adminOnly, async (req, res) => {
+router.get('/most-active-users', auth, adminOnly, async (req, res) => {
   try {
     const users = await Note.aggregate([
       { $group: { _id: '$owner', noteCount: { $sum: 1 } } },
@@ -22,7 +24,7 @@ router.get('/active-users', auth, adminOnly, async (req, res) => {
         }
       },
       { $unwind: '$user' },
-      { $project: { _id: 0, email: '$user.email', noteCount: 1 } }
+      { $project: { _id: 0, username: '$user.email', noteCount: 1 } }
     ]);
     res.json(users);
   } catch (err) {
@@ -31,7 +33,7 @@ router.get('/active-users', auth, adminOnly, async (req, res) => {
 });
 
 // 2. Most used tags (top 10)
-router.get('/popular-tags', auth, adminOnly, async (req, res) => {
+router.get('/most-used-tags', auth, adminOnly, async (req, res) => {
   try {
     const tags = await Note.aggregate([
       { $unwind: '$tags' },
@@ -47,7 +49,7 @@ router.get('/popular-tags', auth, adminOnly, async (req, res) => {
 });
 
 // 3. Notes created per day (last 7 days)
-router.get('/notes-per-day', auth, adminOnly, async (req, res) => {
+router.get('/notes-created-daily', auth, adminOnly, async (req, res) => {
   try {
     const sevenDaysAgo = new Date();
     sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 6);
@@ -62,7 +64,8 @@ router.get('/notes-per-day', auth, adminOnly, async (req, res) => {
           count: { $sum: 1 }
         }
       },
-      { $sort: { _id: 1 } }
+      { $sort: { _id: 1 } },
+      { $project: { _id: 0, date: '$_id', count: 1 } }
     ]);
     res.json(notesPerDay);
   } catch (err) {
