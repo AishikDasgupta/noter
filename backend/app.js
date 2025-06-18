@@ -16,9 +16,7 @@ const app = express();
 // Enable CORS for specified origins (replace with your actual frontend URLs)
 app.use(cors({
  origin: [
-    'https://noter-six.vercel.app',
-    'https://noter-git-master-itsdg19-gmailcoms-projects.vercel.app',
-    'https://noter-pdgt9wO8d-itsdg19-gmailcoms-projects.vercel.app',
+    'https://noter-frontend.netlify.app/',
     'http://localhost:3000'
   ],
   credentials: true
