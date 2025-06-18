@@ -2,6 +2,8 @@
 
 A full-stack notes management application built with Angular and Node.js, featuring role-based access control, note sharing, and analytics dashboard.
 
+---
+
 ## 🚀 Features
 
 ### ✅ **User Authentication**
@@ -44,6 +46,8 @@ A full-stack notes management application built with Angular and Node.js, featur
   - Access to analytics dashboard
   - View system-wide statistics
 
+---
+
 ## 🛠️ Tech Stack
 
 ### Backend
@@ -61,22 +65,26 @@ A full-stack notes management application built with Angular and Node.js, featur
 - **Charts**: Chart.js
 - **State Management**: RxJS Observables
 
+---
+
 ## 📁 Project Structure
 
 ```
 notes-app/
-├── backend/              # Node.js API server
-│   ├── middlewares/      # Auth & admin middlewares
-│   ├── models/          # MongoDB models
-│   ├── routes/          # API routes
-│   └── server.js        # Entry point
-├── frontend/            # Angular application
+├── backend/            # Node.js API server
+│   ├── middlewares/    # Auth & admin middlewares
+│   ├── models/         # MongoDB models
+│   ├── routes/         # API routes
+│   └── server.js       # Entry point
+├── frontend/           # Angular application
 │   ├── src/app/
-│   │   ├── core/        # Guards, services, interceptors
-│   │   ├── features/    # Feature modules
-│   │   └── shared/      # Shared components & models
-└── package.json         # Root scripts
+│   │   ├── core/       # Guards, services, interceptors
+│   │   ├── features/   # Feature modules
+│   │   └── shared/     # Shared components & models
+└── package.json        # Root scripts
 ```
+
+---
 
 ## 🚀 Getting Started
 
@@ -114,7 +122,7 @@ JWT_SECRET=your_jwt_secret_key_here
 npm run dev
 
 # Or run separately
-npm run dev:backend  # Backend on port 5000
+npm run dev:backend   # Backend on port 5000
 npm run dev:frontend # Frontend on port 3000
 ```
 
@@ -122,6 +130,8 @@ npm run dev:frontend # Frontend on port 3000
 
 - **Frontend**: http://localhost:3000
 - **Backend API**: http://localhost:5000/api
+
+---
 
 ## 👥 User Roles & Testing
 
@@ -143,7 +153,7 @@ curl -X POST http://localhost:5000/api/auth/create-admin \
   -d '{
     "username": "admin",
     "email": "admin@example.com",
-    "password": "yourpasswod" (couldn't think of a better password, shall add reset/forget password in future)
+    "password": "yourpassword" (couldn't think of a better password, shall add rest/forget password option in future)
   }'
 ```
 
@@ -174,6 +184,8 @@ Or use Postman/Insomnia with:
    - Dashboard menu item hidden
    - Dashboard route protected (redirects to notes)
 
+---
+
 ## 🎯 API Endpoints
 
 ### Authentication
@@ -199,6 +211,8 @@ Or use Postman/Insomnia with:
 - `GET /api/admin/analytics/most-used-tags` - Popular tags
 - `GET /api/admin/analytics/notes-created-daily` - Daily notes chart
 
+---
+
 ## 🎨 UI Features
 
 ### Enhanced Design
@@ -218,6 +232,8 @@ Or use Postman/Insomnia with:
 - Touch-friendly interactions
 - Responsive charts and tables
 
+---
+
 ## 🔒 Security Features
 
 - **JWT Authentication**: Secure token-based auth
@@ -226,6 +242,8 @@ Or use Postman/Insomnia with:
 - **CORS Configuration**: Secure cross-origin requests
 - **Input Validation**: Frontend and backend validation
 - **Route Guards**: Protected Angular routes
+
+---
 
 ## 🧪 Testing
 
@@ -245,6 +263,8 @@ Create some test notes with various tags to see the analytics in action:
 
 - Technology, Personal, Work, Ideas, etc.
 
+---
+
 ## 📊 Analytics Features
 
 The admin dashboard provides insights into:
@@ -254,15 +274,17 @@ The admin dashboard provides insights into:
 - **Growth Trends**: Daily note creation patterns
 - **Interactive Charts**: Visual data representation
 
+---
+
 ## 🔧 Development
 
 ### Available Scripts
 
 ```bash
-npm run dev              # Run both servers
-npm run dev:backend      # Backend only
-npm run dev:frontend     # Frontend only
-npm run install:all      # Install all dependencies
+npm run dev           # Run both servers
+npm run dev:backend   # Backend only
+npm run dev:frontend # Frontend only
+npm run install:all   # Install all dependencies
 ```
 
 ### Backend Development
@@ -279,6 +301,8 @@ npm run install:all      # Install all dependencies
 - Lazy-loaded feature modules
 - Standalone components
 
+---
+
 ## 🚀 Production Deployment
 
 ### Backend
@@ -294,17 +318,34 @@ npm run install:all      # Install all dependencies
 - Deploy to CDN or static hosting
 - Configure environment variables for production API
 
+---
+
+## 🔮 Future Enhancements
+
+We plan to continuously improve the application by incorporating the following features:
+
+* **Rate Limiting**: Implement safeguards to prevent abuse and ensure API stability by limiting the number of requests a user or IP can make within a certain timeframe.
+* **Forgot Password Flow**: Introduce a secure mechanism for users to reset forgotten passwords via email, including token-based verification.
+* **Change Password (Logged-in Users)**: Allow authenticated users to securely update their password from their profile settings, requiring current password verification.
+* **Email Invite for Sharing**: Enable users to invite others to share notes via email, streamlining collaboration setup by sending a direct link or notification.
+* **Real-time Updates**: Explore WebSockets for real-time note updates and collaborative editing, allowing multiple users to see changes instantly.
+* **Unit and Integration Tests**: Expand test coverage for both frontend and backend, including unit tests for critical business logic and integration tests for API endpoints and component interactions.
+
+---
+
 ## 📝 License
 
 This project is licensed under the MIT License.
 
+---
+
 ## 🤝 Contributing
 
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Test thoroughly
-5. Submit a pull request
+1.  Fork the repository
+2.  Create a feature branch
+3.  Make your changes
+4.  Test thoroughly
+5.  Submit a pull request
 
 ---
 
