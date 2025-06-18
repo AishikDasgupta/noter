@@ -155,14 +155,14 @@ export class ShareDialogComponent {
       };
 
       this.notesService.shareNote(this.note._id, shareData).subscribe({
-        next: (updatedNote) => {
+        next: (updatedNote: Note) => {
           this.note = updatedNote;
           this.shareForm.reset({ permission: "read-only" });
           this.snackBar.open("Note shared successfully", "Close", { duration: 2000 });
           this.isSharing = false;
           this.dialogRef.close(updatedNote); // Close dialog on success
         },
-        error: (error) => {
+        error: (error: any) => {
           this.snackBar.open(
             error.error?.message || "Failed to share note",
             "Close",
@@ -185,7 +185,7 @@ export class ShareDialogComponent {
           this.snackBar.open("Permission updated", "Close", { duration: 3000 });
           this.isUpdating = false;
         },
-        error: (error) => {
+        error: (error: any) => {
           this.snackBar.open("Failed to update permission", "Close", {
             duration: 3000,
           });
@@ -204,7 +204,7 @@ export class ShareDialogComponent {
           this.snackBar.open("Share removed", "Close", { duration: 3000 });
           this.isUpdating = false;
         },
-        error: (error) => {
+        error: (error: any) => {
           this.snackBar.open("Failed to remove share", "Close", {
             duration: 3000,
           });

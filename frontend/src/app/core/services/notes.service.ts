@@ -89,4 +89,12 @@ export class NotesService {
       { username }
     );
   }
+
+  // Removes a user's access to a shared note (unshares the note)
+  removeNoteShare(noteId: string, username: string): Observable<Note> {
+    return this.http.post<Note>(
+      `${environment.apiUrl}/notes/${noteId}/unshare`,
+      { username }
+    );
+  }
 }
