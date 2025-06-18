@@ -16,7 +16,7 @@ const app = express();
 // Enable CORS for specified origins (replace with your actual frontend URLs)
 app.use(cors({
   origin: [
-    'https://noter-six.vercel.app', // <-- Replace with your actual Vercel frontend URL
+    'https://noter-pdgt9w08d-itsdg19-gmailcoms-projects.vercel.app', // <-- Replace with your actual Vercel frontend URL
     'http://localhost:3000' // (optional) for local dev
   ],
   credentials: true
