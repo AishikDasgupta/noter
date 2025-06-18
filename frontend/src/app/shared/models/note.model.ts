@@ -6,14 +6,26 @@ export interface Note {
   isArchived: boolean;
   createdAt: string;
   updatedAt: string;
-  owner: string;
+  owner: {
+    _id: string;
+    username: string;
+    email: string;
+  };
   sharedWith: NoteShare[];
 }
 
 export interface NoteShare {
-  user: string;
-  username: string;
+  user: {
+    _id: string;
+    username: string;
+    email: string;
+  };
   permission: "read-only" | "read-write";
+  sharedBy?: {
+    _id: string;
+    username: string;
+    email: string;
+  };
 }
 
 export interface CreateNoteRequest {

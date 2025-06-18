@@ -18,6 +18,7 @@ import { debounceTime, distinctUntilChanged } from "rxjs/operators";
 import { NotesService } from "../../../core/services/notes.service";
 import { Note } from "../../../shared/models/note.model";
 import { ShareDialogComponent } from "../share-dialog/share-dialog.component";
+import { AuthService } from "../../../core/services/auth.service";
 
 @Component({
   selector: "app-notes-list",
@@ -122,16 +123,17 @@ import { ShareDialogComponent } from "../share-dialog/share-dialog.component";
           <p class="text-gray-700 mb-4 line-clamp-3">{{ note.content }}</p>
 
           <div class="flex flex-wrap gap-1 mb-4" *ngIf="note.tags.length > 0">
-            <mat-chip *ngFor="let tag of note.tags" class="text-xs">{{
-              tag
-            }}</mat-chip>
+            <mat-chip *ngFor="let tag of note.tags" class="text-xs">{{ tag }}</mat-chip>
+          </div>
+
+          <!-- Show who shared the note if not owned by current user -->
+          <div *ngIf="note.owner && note.owner._id !== currentUser?._id" class="mb-2 text-sm text-blue-700">
+            Shared by: {{ note.owner.username || note.owner.email }}
           </div>
 
           <div class="flex items-center justify-between text-sm text-gray-500">
-            <span>Updated: {{ note.updatedAt | date: "short" }}</span>
-            <mat-icon *ngIf="note.isArchived" class="text-orange-500"
-              >archive</mat-icon
-            >
+            <span>Updated: {{ note.updatedAt | date: 'short' }}</span>
+            <mat-icon *ngIf="note.isArchived" class="text-orange-500">archive</mat-icon>
           </div>
         </mat-card-content>
       </mat-card>
@@ -190,11 +192,16 @@ export class NotesListComponent implements OnInit {
   searchControl = new FormControl("");
   tagsControl = new FormControl("");
 
+  currentUser: import("../../../shared/models/user.model").User | null = null;
+
   constructor(
     private notesService: NotesService,
     private dialog: MatDialog,
     private snackBar: MatSnackBar,
-  ) {}
+    private authService: AuthService,
+  ) {
+    this.currentUser = this.authService.getCurrentUser();
+  }
 
   ngOnInit(): void {
     this.loadNotes();

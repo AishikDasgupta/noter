@@ -36,6 +36,15 @@ router.get('/', auth, async (req, res) => {
     const search = req.query.search || '';
     const searchRegex = new RegExp(search, 'i');
 
+    // Tags filter
+    let tagsFilter = {};
+    if (req.query.tags) {
+      const tagsArray = req.query.tags.split(',').map(tag => tag.trim()).filter(Boolean);
+      if (tagsArray.length > 0) {
+        tagsFilter = { tags: { $in: tagsArray } };
+      }
+    }
+
     // Build query
     const baseQuery = {
       $and: [
@@ -53,7 +62,8 @@ router.get('/', auth, async (req, res) => {
                 { tags: searchRegex }
               ]
             }
-          : {}
+          : {},
+        tagsFilter
       ]
     };
 
@@ -61,9 +71,9 @@ router.get('/', auth, async (req, res) => {
       .sort({ updatedAt: -1 })
       .skip(skip)
       .limit(limit)
-      .populate('owner', 'email')
-      .populate('sharedWith.user', 'email')
-      .populate('sharedWith.sharedBy', 'email');
+      .populate('owner', 'username email') // Add username to owner
+      .populate('sharedWith.user', 'username email') // Add username to sharedWith.user
+      .populate('sharedWith.sharedBy', 'username email'); // Add username to sharedBy
 
     const total = await Note.countDocuments(baseQuery);
 
@@ -137,7 +147,7 @@ router.delete('/:id', auth, async (req, res) => {
   }
 });
 
-// SHARE a note using email
+// SHARE a note using username
 router.post('/:id/share', auth, async (req, res) => {
   try {
     const note = await Note.findById(req.params.id);
@@ -146,17 +156,25 @@ router.post('/:id/share', auth, async (req, res) => {
     if (!note.owner.equals(req.user.userId))
       return res.status(403).json({ message: 'Only the owner can share this note.' });
 
-    const { email, permission } = req.body;
+    const { username, permission } = req.body;
 
-    if (!['read', 'write'].includes(permission)) {
+    // Normalize permission
+    const normalizePermission = (perm) => {
+      if (perm === 'read-only') return 'read';
+      if (perm === 'read-write') return 'write';
+      return perm;
+    };
+    const normalizedPermission = normalizePermission(permission);
+
+    if (!['read', 'write'].includes(normalizedPermission)) {
       return res.status(400).json({ message: 'Permission must be "read" or "write"' });
     }
 
-    if (!email || !/^\S+@\S+\.\S+$/.test(email)) {
-      return res.status(400).json({ message: 'Invalid email address' });
+    if (!username) {
+      return res.status(400).json({ message: 'Username is required' });
     }
 
-    const user = await User.findOne({ email });
+    const user = await User.findOne({ username });
     if (!user) return res.status(404).json({ message: 'User not found' });
 
     if (user._id.equals(req.user.userId)) {
@@ -165,9 +183,9 @@ router.post('/:id/share', auth, async (req, res) => {
 
     const existing = note.sharedWith.find((sw) => sw.user.equals(user._id));
     if (existing) {
-      existing.permission = permission;
+      existing.permission = normalizedPermission;
     } else {
-      note.sharedWith.push({ user: user._id, permission });
+      note.sharedWith.push({ user: user._id, permission: normalizedPermission });
     }
 
     await note.save();
@@ -177,7 +195,7 @@ router.post('/:id/share', auth, async (req, res) => {
   }
 });
 
-// REMOVE shared user using email
+// REMOVE shared user using username
 router.post('/:id/unshare', auth, async (req, res) => {
   try {
     const note = await Note.findById(req.params.id);
@@ -187,13 +205,13 @@ router.post('/:id/unshare', auth, async (req, res) => {
       return res.status(403).json({ message: 'Only the owner can unshare this note.' });
     }
 
-    const { email } = req.body;
+    const { username } = req.body;
 
-    if (!email || !/^\S+@\S+\.\S+$/.test(email)) {
-      return res.status(400).json({ message: 'Invalid email address' });
+    if (!username) {
+      return res.status(400).json({ message: 'Username is required' });
     }
 
-    const user = await User.findOne({ email });
+    const user = await User.findOne({ username });
     if (!user) return res.status(404).json({ message: 'User not found' });
 
     note.sharedWith = note.sharedWith.filter((sw) => !sw.user.equals(user._id));

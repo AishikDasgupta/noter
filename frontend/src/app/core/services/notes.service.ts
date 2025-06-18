@@ -55,26 +55,27 @@ export class NotesService {
   }
 
   shareNote(noteId: string, shareData: ShareNoteRequest): Observable<Note> {
+    // Backend expects { username, permission }
     return this.http.post<Note>(
       `${environment.apiUrl}/notes/${noteId}/share`,
-      shareData,
+      { username: shareData.sharedWithUsername, permission: shareData.permission }
     );
   }
 
   updateNotePermission(
     noteId: string,
-    sharedWithUserId: string,
-    permission: string,
+    username: string,
+    permission: "read-only" | "read-write",
   ): Observable<Note> {
-    return this.http.put<Note>(
-      `${environment.apiUrl}/notes/${noteId}/share/${sharedWithUserId}`,
-      { permission },
-    );
+    // Use shareNote to update permission
+    return this.shareNote(noteId, { sharedWithUsername: username, permission });
   }
 
-  removeNoteShare(noteId: string, sharedWithUserId: string): Observable<Note> {
-    return this.http.delete<Note>(
-      `${environment.apiUrl}/notes/${noteId}/share/${sharedWithUserId}`,
+  removeNoteShare(noteId: string, username: string): Observable<Note> {
+    // Backend expects POST to /unshare with { username }
+    return this.http.post<Note>(
+      `${environment.apiUrl}/notes/${noteId}/unshare`,
+      { username }
     );
   }
 }

@@ -8,16 +8,17 @@ const router = express.Router();
 // Register
 router.post('/register', async (req, res) => {
   try {
-    const { email, password, role } = req.body;
+    const { username, email, password, role } = req.body; // Accept username
     // Check if user exists
-    const existingUser = await User.findOne({ email });
-    if (existingUser) return res.status(400).json({ message: 'This email already exists' });
+    const existingUser = await User.findOne({ $or: [{ email }, { username }] });
+    if (existingUser) return res.status(400).json({ message: 'This email or username already exists' });
 
     // Hash password
     const hashedPassword = await bcrypt.hash(password, 10);
 
     // Create user
     const user = new User({ 
+      username, // Store username
       email, 
       password: hashedPassword,
       role: role || 'user' // Default to 'user' if no role provided
@@ -34,16 +35,17 @@ router.post('/register', async (req, res) => {
 // WARNING: Remove or secure this endpoint before production!
 router.post('/register-admin', async (req, res) => {
   try {
-    const { email, password } = req.body;
+    const { username, email, password } = req.body; // Accept username
     // Check if user exists
-    const existingUser = await User.findOne({ email });
-    if (existingUser) return res.status(400).json({ message: 'This email already exists' });
+    const existingUser = await User.findOne({ $or: [{ email }, { username }] });
+    if (existingUser) return res.status(400).json({ message: 'This email or username already exists' });
 
     // Hash password
     const hashedPassword = await bcrypt.hash(password, 10);
 
     // Create admin user
     const user = new User({ 
+      username, // Store username
       email, 
       password: hashedPassword,
       role: 'admin'
@@ -70,7 +72,7 @@ router.post('/login', async (req, res) => {
 
     // Create JWT
     const token = jwt.sign(
-      { userId: user._id, email: user.email, role: user.role },
+      { userId: user._id, email: user.email, role: user.role, username: user.username },
       process.env.JWT_SECRET,
       { expiresIn: '1d' }
     );
@@ -79,6 +81,7 @@ router.post('/login', async (req, res) => {
       token, 
       user: { 
         _id: user._id,
+        username: user.username,
         email: user.email, 
         role: user.role 
       } 

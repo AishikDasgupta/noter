@@ -32,7 +32,7 @@ import { User } from "./shared/models/user.model";
             Notes
           </button>
 
-          <button mat-button routerLink="/dashboard">
+          <button mat-button routerLink="/dashboard" *ngIf="user.role === 'admin'">
             <mat-icon>dashboard</mat-icon>
             Dashboard
           </button>

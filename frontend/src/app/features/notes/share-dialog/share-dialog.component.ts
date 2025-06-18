@@ -49,7 +49,7 @@ import { Note, NoteShare } from "../../../shared/models/note.model";
           <mat-list-item *ngFor="let share of note.sharedWith" class="border-b">
             <div class="flex justify-between items-center w-full">
               <div>
-                <span class="font-medium">{{ share.username }}</span>
+                <span class="font-medium">{{ share.user.username }}</span>
                 <span class="text-sm text-gray-500 ml-2"
                   >({{ share.permission }})</span
                 >
@@ -59,7 +59,7 @@ import { Note, NoteShare } from "../../../shared/models/note.model";
                   <mat-select
                     [value]="share.permission"
                     (selectionChange)="
-                      updatePermission(share.user, $event.value)
+                      updatePermission(share.user.username, $event.value)
                     "
                   >
                     <mat-option value="read-only">Read Only</mat-option>
@@ -69,7 +69,7 @@ import { Note, NoteShare } from "../../../shared/models/note.model";
                 <button
                   mat-icon-button
                   color="warn"
-                  (click)="removeShare(share.user)"
+                  (click)="removeShare(share.user.username)"
                   [disabled]="isUpdating"
                 >
                   <mat-icon>delete</mat-icon>
@@ -179,7 +179,7 @@ export class ShareDialogComponent {
     this.isUpdating = true;
 
     this.notesService
-      .updateNotePermission(this.note._id, userId, permission)
+      .updateNotePermission(this.note._id, userId, permission as "read-only" | "read-write")
       .subscribe({
         next: (updatedNote) => {
           this.note = updatedNote;
