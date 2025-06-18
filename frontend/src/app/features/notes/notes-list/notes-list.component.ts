@@ -123,7 +123,9 @@ import { AuthService } from "../../../core/services/auth.service";
           <p class="text-gray-700 mb-4 line-clamp-3">{{ note.content }}</p>
 
           <div class="flex flex-wrap gap-1 mb-4" *ngIf="note.tags.length > 0">
-            <mat-chip *ngFor="let tag of note.tags" class="text-xs">{{ tag }}</mat-chip>
+            <mat-chip *ngFor="let tag of note.tags; let i = index" [ngClass]="getTagColor(i) + ' !important'" class="text-xs">
+              {{ tag }}
+            </mat-chip>
           </div>
 
           <!-- Show who shared the note if not owned by current user -->
@@ -299,5 +301,20 @@ export class NotesListComponent implements OnInit {
         },
       });
     }
+  }
+
+  getTagColor(index: number): string {
+    const colors = [
+      'bg-blue-100 text-blue-800',
+      'bg-green-100 text-green-800',
+      'bg-yellow-100 text-yellow-800',
+      'bg-pink-100 text-pink-800',
+      'bg-purple-100 text-purple-800',
+      'bg-red-100 text-red-800',
+      'bg-indigo-100 text-indigo-800',
+      'bg-teal-100 text-teal-800',
+      'bg-orange-100 text-orange-800',
+    ];
+    return colors[index % colors.length];
   }
 }
