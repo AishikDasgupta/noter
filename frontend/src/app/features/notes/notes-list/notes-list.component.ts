@@ -186,7 +186,7 @@ export class NotesListComponent implements OnInit {
   notes: Note[] = [];
   totalItems = 0;
   currentPage = 0;
-  pageSize = 10;
+  pageSize = 5;
   isLoading = false;
 
   searchControl = new FormControl("");

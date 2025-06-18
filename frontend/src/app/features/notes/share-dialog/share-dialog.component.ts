@@ -158,10 +158,9 @@ export class ShareDialogComponent {
         next: (updatedNote) => {
           this.note = updatedNote;
           this.shareForm.reset({ permission: "read-only" });
-          this.snackBar.open("Note shared successfully", "Close", {
-            duration: 3000,
-          });
+          this.snackBar.open("Note shared successfully", "Close", { duration: 2000 });
           this.isSharing = false;
+          this.dialogRef.close(updatedNote); // Close dialog on success
         },
         error: (error) => {
           this.snackBar.open(
